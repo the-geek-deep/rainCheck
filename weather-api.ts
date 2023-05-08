@@ -1,8 +1,9 @@
 // weather-api.ts
 
-import fetch from 'node-fetch';
+const fetch = require('isomorphic-fetch');
 
- interface WeatherData {
+
+ export interface WeatherData {
   main: {
     temp: number;
     humidity: number;
@@ -19,4 +20,4 @@ import fetch from 'node-fetch';
   const data : any = await response.json();
   return data;
 }
-module.exports = {getWeatherData, WeatherData};
+module.exports = {getWeatherData};

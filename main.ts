@@ -1,7 +1,7 @@
 
 
 const { App, LogLevel } = require('@slack/bolt');
-const { getWeatherData , WeatherData } = require('./weather-api.mts');
+const { getWeatherData , WeatherData } = require('./weather-api.ts');
 
 const app = new App({
   socketMode: true,
@@ -10,8 +10,6 @@ const app = new App({
   logLevel: LogLevel.INFO,
   signingSecret: process.env.SLACK_SIGNING_TOKEN,
 });
-
-
 
 app.command('/weather', async ({ ack, command, context }) => {
   await ack();
