@@ -54,8 +54,3 @@ app.command('/weather', async ({ ack, command, respond ,client} : {ack : Functio
   console.log('Eureka!');
 })();
 
-/*
-bot_token : xoxb-5206254512375-5223392242386-ePOBPpjKlkYGU9U1ppSN3XDl
-signing_secret : 463b503513f09be114c51aee40b2c4b
-app_token : xapp-1-A056Y0KQ3TK-5236973208292-0107afd576c2d6aba4bc4fd3a0dbc0aa130fc2f8565e1f17a7f3a5e60f8d5bf4
- */
