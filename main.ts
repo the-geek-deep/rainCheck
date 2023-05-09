@@ -1,5 +1,5 @@
 const { App, LogLevel } = require('@slack/bolt');
-
+require('dotenv').config();
 //importing interface and api-function from weather-api.ts
 import { WeatherData, getWeatherData } from "./weather-api";
 
