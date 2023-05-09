@@ -1,3 +1,4 @@
+"use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -34,39 +35,22 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-var _this = this;
+Object.defineProperty(exports, "__esModule", { value: true });
 var _a = require('@slack/bolt'), App = _a.App, LogLevel = _a.LogLevel;
-var axios = require('axios');
-// Fetches the current weather data for a given city from the OpenWeather API
-function getWeatherData(city) {
-    return __awaiter(this, void 0, void 0, function () {
-        var apiKey, url, response, data;
-        return __generator(this, function (_a) {
-            switch (_a.label) {
-                case 0:
-                    apiKey = process.env.WEATHER_API_KEY;
-                    url = "https://api.openweathermap.org/data/2.5/weather?q=".concat(city, "&appid=").concat(apiKey, "&units=metric");
-                    return [4 /*yield*/, axios.get(url)];
-                case 1:
-                    response = _a.sent();
-                    data = response.data;
-                    return [2 /*return*/, data];
-            }
-        });
-    });
-}
+//importing interface and api-function from weather-api.ts
+var weather_api_1 = require("./weather-api");
 // Create a new Slack Bolt app
 var app = new App({
-    token: 'xoxb-5206254512375-5223392242386-gsaqiBeQTVfRqokKLvRlbNLj',
+    token: process.env.SLACK_BOT_TOKEN,
     socketMode: true,
     logLevel: LogLevel.INFO,
-    signingSecret: '463b503513f09be114c51aee40b2c4b8',
-    appToken: 'xapp-1-A056Y0KQ3TK-5236050399249-3eab67ec9f4eb87093c04478ad43b2b6fa3eccc57bce2d095168b003d604bcaf',
+    signingSecret: process.env.SLACK_SIGNING_SECRET,
+    appToken: process.env.SLACK_APP_TOKEN,
 });
 // Listen for the /weather command and respond with the current weather data for the specified city
 app.command('/weather', function (_a) {
-    var ack = _a.ack, command = _a.command, context = _a.context;
-    return __awaiter(_this, void 0, void 0, function () {
+    var ack = _a.ack, command = _a.command, respond = _a.respond, client = _a.client;
+    return __awaiter(void 0, void 0, void 0, function () {
         var city, weatherData, temperature, description, humidity, message, error_1;
         return __generator(this, function (_b) {
             switch (_b.label) {
@@ -80,7 +64,7 @@ app.command('/weather', function (_a) {
                     _b.label = 2;
                 case 2:
                     _b.trys.push([2, 5, , 7]);
-                    return [4 /*yield*/, getWeatherData(city)];
+                    return [4 /*yield*/, (0, weather_api_1.getWeatherData)(city)];
                 case 3:
                     weatherData = _b.sent();
                     temperature = weatherData.main.temp;
@@ -88,9 +72,8 @@ app.command('/weather', function (_a) {
                     humidity = weatherData.main.humidity;
                     message = "The current temperature and humidity in ".concat(city, " is ").concat(temperature, "\u00B0C and ").concat(humidity, " respectively with ").concat(description, ".");
                     // Post the message in the channel where the command was issued
-                    return [4 /*yield*/, app.client.chat.postMessage({
-                            token: context.botToken,
-                            channel: command.channel_id,
+                    return [4 /*yield*/, client.respond({
+                            response_type: 'in_channel',
                             text: message,
                         })];
                 case 4:
@@ -101,10 +84,8 @@ app.command('/weather', function (_a) {
                     error_1 = _b.sent();
                     console.error(error_1);
                     // Post an error message in the channel where the command was issued
-                    return [4 /*yield*/, app.client.chat.postMessage({
-                            appToken: context.appToken,
-                            token: context.token,
-                            channel: command.channel_id,
+                    return [4 /*yield*/, client.respond({
+                            response_type: 'ephemeral',
                             text: "Sorry, there was an error retrieving the weather data for ".concat(city, "."),
                         })];
                 case 6:
@@ -117,7 +98,7 @@ app.command('/weather', function (_a) {
     });
 });
 // Start the app
-(function () { return __awaiter(_this, void 0, void 0, function () {
+(function () { return __awaiter(void 0, void 0, void 0, function () {
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, app.start(process.env.PORT || 3000)];
@@ -128,3 +109,8 @@ app.command('/weather', function (_a) {
         }
     });
 }); })();
+/*
+bot_token : xoxb-5206254512375-5223392242386-ePOBPpjKlkYGU9U1ppSN3XDl
+signing_secret : 463b503513f09be114c51aee40b2c4b
+app_token : xapp-1-A056Y0KQ3TK-5236973208292-0107afd576c2d6aba4bc4fd3a0dbc0aa130fc2f8565e1f17a7f3a5e60f8d5bf4
+ */ 
