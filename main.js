@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var _a = require('@slack/bolt'), App = _a.App, LogLevel = _a.LogLevel;
+require('dotenv').config();
 //importing interface and api-function from weather-api.ts
 var weather_api_1 = require("./weather-api");
 // Create a new Slack Bolt app
